@@ -4,6 +4,7 @@ from langchain.chains import LLMChain
 from langchain_google_genai import ChatGoogleGenerativeAI
 import google.generativeai as genai
 
+
 def check_api_key(api_key):
     """Verify if the API key is valid."""
     try:
@@ -13,24 +14,28 @@ def check_api_key(api_key):
     except Exception:
         return False
 
+
 def get_gemini_llm(api_key, temperature=0.7):
     """Create and return a Gemini LLM instance."""
-    return ChatGoogleGenerativeAI(
-        model="gemini-pro",
-        google_api_key=api_key,
-        temperature=temperature,
-        max_output_tokens=2048
-    )
+    return ChatGoogleGenerativeAI(model="gemini-1.5-flash",
+                                  google_api_key=api_key,
+                                  temperature=temperature,
+                                  max_output_tokens=2048)
+
 
 def summarize_text(text, length="Medium", api_key=None):
     """Summarize the given text using the Gemini API."""
     length_guide = {
-        "Very Short": "Provide an extremely concise summary in 2-3 sentences.",
-        "Short": "Provide a brief summary in a short paragraph.",
-        "Medium": "Provide a comprehensive summary covering all main points.",
-        "Detailed": "Provide a detailed summary with all important information and supporting details."
+        "Very Short":
+        "Provide an extremely concise summary in 2-3 sentences.",
+        "Short":
+        "Provide a brief summary in a short paragraph.",
+        "Medium":
+        "Provide a comprehensive summary covering all main points.",
+        "Detailed":
+        "Provide a detailed summary with all important information and supporting details."
     }
-    
+
     template = """
     You are an expert academic assistant helping a student summarize their notes.
     
@@ -46,19 +51,22 @@ def summarize_text(text, length="Medium", api_key=None):
     
     SUMMARY:
     """
-    
-    prompt = PromptTemplate(
-        input_variables=["text", "length_guide"],
-        template=template
-    )
-    
-    llm = get_gemini_llm(api_key, temperature=0.2)  # Lower temperature for summaries
+
+    prompt = PromptTemplate(input_variables=["text", "length_guide"],
+                            template=template)
+
+    llm = get_gemini_llm(api_key,
+                         temperature=0.2)  # Lower temperature for summaries
     chain = LLMChain(llm=llm, prompt=prompt)
-    
+
     response = chain.run(text=text, length_guide=length_guide[length])
     return response
 
-def answer_question(question, subject_area="General", context=None, api_key=None):
+
+def answer_question(question,
+                    subject_area="General",
+                    context=None,
+                    api_key=None):
     """Answer academic questions using the Gemini API."""
     context_section = ""
     if context:
@@ -68,7 +76,7 @@ def answer_question(question, subject_area="General", context=None, api_key=None
         
         Use this context to inform your answer if relevant to the question.
         """
-    
+
     template = """
     You are an expert academic tutor specializing in {subject_area}.
     
@@ -88,23 +96,26 @@ def answer_question(question, subject_area="General", context=None, api_key=None
     
     ANSWER:
     """
-    
+
     prompt = PromptTemplate(
         input_variables=["question", "subject_area", "context_section"],
-        template=template
-    )
-    
-    llm = get_gemini_llm(api_key, temperature=0.7)  # Higher temperature for creative answers
+        template=template)
+
+    llm = get_gemini_llm(
+        api_key, temperature=0.7)  # Higher temperature for creative answers
     chain = LLMChain(llm=llm, prompt=prompt)
-    
-    response = chain.run(
-        question=question,
-        subject_area=subject_area,
-        context_section=context_section
-    )
+
+    response = chain.run(question=question,
+                         subject_area=subject_area,
+                         context_section=context_section)
     return response
 
-def generate_study_tips(subject, goal, learning_style, additional_info="", api_key=None):
+
+def generate_study_tips(subject,
+                        goal,
+                        learning_style,
+                        additional_info="",
+                        api_key=None):
     """Generate personalized study tips using the Gemini API."""
     template = """
     You are an expert education consultant specializing in personalized study strategies.
@@ -125,19 +136,18 @@ def generate_study_tips(subject, goal, learning_style, additional_info="", api_k
     
     PERSONALIZED STUDY TIPS:
     """
-    
-    prompt = PromptTemplate(
-        input_variables=["subject", "goal", "learning_style", "additional_info"],
-        template=template
-    )
-    
-    llm = get_gemini_llm(api_key, temperature=0.8)  # Higher temperature for personalized tips
+
+    prompt = PromptTemplate(input_variables=[
+        "subject", "goal", "learning_style", "additional_info"
+    ],
+                            template=template)
+
+    llm = get_gemini_llm(
+        api_key, temperature=0.8)  # Higher temperature for personalized tips
     chain = LLMChain(llm=llm, prompt=prompt)
-    
-    response = chain.run(
-        subject=subject,
-        goal=goal,
-        learning_style=learning_style,
-        additional_info=additional_info
-    )
+
+    response = chain.run(subject=subject,
+                         goal=goal,
+                         learning_style=learning_style,
+                         additional_info=additional_info)
     return response
