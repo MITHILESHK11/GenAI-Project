@@ -76,7 +76,11 @@ We welcome contributions! If you have any ideas to improve the assistant or want
 ## 📬 Contact
 
 If you have any questions or feedback, feel free to reach out to the project maintainers via GitHub issues or email.
-Email:
+
+- **Name**: Mithilesh Kolhapurkar
+- **GitHub**: [MITHILESHK11](https://github.com/MITHILESHK11)
+- **LinkedIn**: [LinkedIn Profile](https://www.linkedin.com/in/mithilesh-kolhapurkar/)
+- **Email**: [m.kolhapurkar3529@gmail.com](mailto:m.kolhapurkar3529@gmail.com)
 
 Happy learning! 🎓
 ---
